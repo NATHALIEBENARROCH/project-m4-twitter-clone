@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import logo from "./logo.svg";
 import "./App.css";
 import Notifications from "./Notifications";
 import HomeFeed from "./HomeFeed";
@@ -8,14 +7,16 @@ import Bookmarks from "./Bookmarks";
 import TweetDetails from "./TweetDetails";
 import Profile from "./Profile";
 import Sidebar from "./Sidebar";
-import { COLORS } from "./GlobalStyles";
+import styled from "styled-components";
+// import { COLORS } from "./GlobalStyles";
 import GlobalStyles from "./GlobalStyles";
 
 const App = () => {
   return (
-    <GlobalStyles>
-      <wrapper>
-        <BrowserRouter>
+    <BrowserRouter>
+      <GlobalStyles />
+      <AppContainer>
+        <MainWrapper>
           <Sidebar />
           <Switch>
             <Route exact path="/">
@@ -30,14 +31,26 @@ const App = () => {
             <Route path="/tweet/:tweetId">
               <TweetDetails />
             </Route>
-            <Route path="/:profileId">
+            <Route path="/profile/:profileId">
               <Profile />
             </Route>
           </Switch>
-        </BrowserRouter>
-      </wrapper>
-    </GlobalStyles>
+        </MainWrapper>
+      </AppContainer>
+    </BrowserRouter>
   );
 };
 
 export default App;
+
+const AppContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 100vw;
+`;
+
+const MainWrapper = styled.div`
+  display: flex;
+  width: 900px;
+`;

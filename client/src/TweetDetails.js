@@ -1,7 +1,7 @@
 import React from "react";
 
 const TweetDetails = () => {
-  return <div>Notify me!</div>;
+  return <div></div>;
 };
 
 export default TweetDetails;
