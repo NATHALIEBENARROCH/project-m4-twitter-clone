@@ -37,13 +37,13 @@ const HomeFeed = () => {
         return <Tweet tweet={tweet} />;
       })
     ) : (
-      <div>"loading"</div>
+      <div>"TWEET COMPONENT</div>
     );
 
   return status == "idle" ? (
     <TweetFeed>
       <H1>Home</H1>
-      <div>{tweetDisplay}</div>
+      <div>TWEETFEED{tweetDisplay}</div>
     </TweetFeed>
   ) : status == "loading" ? (
     <div>loading</div>

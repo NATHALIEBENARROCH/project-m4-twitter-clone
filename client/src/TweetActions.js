@@ -1,27 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Icon } from "react-icons-kit";
 import { message } from "react-icons-kit/entypo/message";
 import { cycle } from "react-icons-kit/entypo/cycle";
 import { outlined } from "react-icons-kit/entypo/outlined";
 import { upload } from "react-icons-kit/entypo/upload";
+import { heart } from "react-icons-kit/entypo/heart";
 import { Link } from "react-router-dom";
 
-const TweetActions = () => {
+const TweetActions = ({ id, liked }) => {
+  const [isLiked, setIsLiked] = useState(liked);
+
+  const handleLikeIcon = () => {
+    fetch(`/api/tweet/${id}/like`, {
+      method: "PUT",
+      body: JSON.stringify({ like: !isLiked }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then(() => setIsLiked(!isLiked))
+      .catch(console.error);
+  };
   return (
     <Wrapper>
-      <Link>
-        <Icon icon={message} />
-      </Link>
-      <Link>
-        <Icon icon={cycle} />
-      </Link>
-      <Link>
-        <Icon icon={outlined} />
-      </Link>
-      <Link>
-        <Icon icon={upload} />
-      </Link>
+      <Icon icon={message} />
+      <Icon icon={cycle} />
+      <Icon onClick={handleLikeIcon} icon={isLiked ? heart : outlined} />
+      <Icon icon={upload} />
     </Wrapper>
   );
 };

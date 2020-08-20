@@ -2,28 +2,47 @@ import React, { useState, Component } from "react";
 import styled from "styled-components";
 import TweetActions from "./TweetActions";
 import { COLORS } from "./constants";
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { format } from "date-fns";
 
 const Tweet = ({ tweet }) => {
-  return (
-    <Wrapper>
-      <Div3>
-        <Div1>
-          <Avatar src={tweet.author.avatarSrc} />
-          <Div2>
-            <Author2>
-              <strong>{tweet.author.displayName} </strong>
-            </Author2>
-            <Author> @{tweet.author.handle} </Author>
-            <Author> {tweet.timestamp} </Author>
-          </Div2>
-        </Div1>
-        <Div4>
-          <Author> {tweet.status} </Author>
-          <MediaPic src={tweet.media.length > 0 ? tweet.media[0].url : ""} />
-          <TweetActions>Tweet bar actions icons</TweetActions>
-        </Div4>
-      </Div3>
-    </Wrapper>
+  console.log(tweet);
+  let history = useHistory();
+  function handleClick(ev) {
+    ev.preventDefault();
+    history.push(`/profile/${tweet.author.handle}`);
+  }
+
+  return tweet ? (
+    <MyLink to={`/tweet/${tweet.id}`}>
+      <Wrapper>
+        <Div3>
+          <Div1>
+            <Avatar src={tweet.author.avatarSrc} onClick={handleClick} />
+            <Div2>
+              <Author2 onClick={handleClick}>
+                <strong>{tweet.author.displayName} </strong>
+              </Author2>
+              <Author onClick={handleClick}> @{tweet.author.handle} </Author>
+              <Author>
+                {" "}
+                {format(new Date(tweet.timestamp), "MM/dd/yyyy")}{" "}
+              </Author>
+            </Div2>
+          </Div1>
+          <Div4>
+            <Author> {tweet.status} </Author>
+            <MediaPic src={tweet.media.length > 0 ? tweet.media[0].url : ""} />
+            <TweetActions id={tweet.id} liked={tweet.isLiked}>
+              Tweet bar actions icons
+            </TweetActions>
+          </Div4>
+        </Div3>
+      </Wrapper>
+    </MyLink>
+  ) : (
+    <div>loading</div>
   );
 };
 
@@ -77,6 +96,7 @@ const Div4 = styled.div`
 const Avatar = styled.img`
   max-width: 60px;
   border-radius: 50%;
+  z-index: 10;
 `;
 
 const MediaPic = styled.img`
@@ -91,4 +111,9 @@ const Author2 = styled.span`
 
 const Author = styled.span`
   font-size: 0.4 rem;
+`;
+
+const MyLink = styled(Link)`
+  color: black;
+  text-decoration: none;
 `;

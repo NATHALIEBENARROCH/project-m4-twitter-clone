@@ -6,6 +6,7 @@ import { COLORS } from "./constants";
 import { Icon } from "react-icons-kit";
 import { pin } from "react-icons-kit/entypo/pin";
 import { calendar } from "react-icons-kit/entypo/calendar";
+import Tweet from "./Tweet";
 
 const Profile = () => {
   // params = {profileId: 'treasureymog'}
@@ -14,16 +15,53 @@ const Profile = () => {
   //const params = useParams();
   const { profileId } = useParams();
   const [profile, setProfile] = useState(null);
+  const [tweets, setTweets] = useState([]);
+  //  create a new local state for feed
 
   useEffect(() => {
+    upDateProfile();
+    getFeed();
+  }, [profileId]);
+  console.log(profile);
+
+  const getFeed = () => {
+    fetch(`/api/${profileId}/feed`)
+      .then((res) => res.json())
+      .then((feedData) => {
+        const tweetsdata = Object.values(feedData.tweetsById);
+        setTweets(tweetsdata);
+        //setFeed with data setFeed(data)
+      });
+  };
+
+  const upDateProfile = () => {
     fetch(`/api/${profileId}/profile`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setProfile(data);
       });
-  }, [profileId]);
-  console.log("error in line 23", profile);
+  };
+  const followToggle = () => {
+    fetch(`/api/${profileId}/follow`, { method: `PUT` })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          upDateProfile();
+        }
+      });
+  };
+
+  const unfollowToggle = () => {
+    fetch(`/api/${profileId}/unfollow`, { method: `PUT` })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          upDateProfile();
+        }
+      });
+  };
+
   if (profile)
     return (
       <Wrapper>
@@ -31,18 +69,20 @@ const Profile = () => {
           style={{ backgroundImage: `url(${profile.profile.bannerSrc})` }}
         />
         <Avatar src={profile.profile.avatarSrc} />
-        <Button>Follow</Button>
+        {profile.profile.isBeingFollowedByYou === true ? (
+          <Button onClick={unfollowToggle}>Following</Button>
+        ) : (
+          <Button onClick={followToggle}>Follow</Button>
+        )}
         <Wrapper2>
           <span>
             <strong>{profile.profile.displayName}</strong>
           </span>
-
           <Wrapper3>
             <Copy>@{profile.profile.handle}</Copy>
-            if (isFollowingyou === true) return (<Copy>Follows you </Copy>)
           </Wrapper3>
-          <h4>{profile.profile.bio}</h4>
-          <Wrapper4>
+          <span>{profile.profile.bio}</span>
+          <Wrapper3>
             <Copy>
               <Icon icon={pin} />
               {profile.profile.location}
@@ -51,12 +91,15 @@ const Profile = () => {
               <Icon icon={calendar} />
               {profile.profile.joined}
             </Copy>
-          </Wrapper4>
-          <Wrapper5>
+          </Wrapper3>
+          <Wrapper3>
             <Copy>{profile.profile.numFollowing} Following</Copy>
             <Copy>{profile.profile.numFollowers}Followers</Copy>
-          </Wrapper5>
+          </Wrapper3>
         </Wrapper2>
+        {tweets.map((tweet) => (
+          <Tweet tweet={tweet} />
+        ))}
       </Wrapper>
     );
   else return <span>loading</span>;
@@ -72,8 +115,6 @@ const Wrapper = styled.div`
   align-items: left;
   background-color: white;
   border: 0.5px solid ${COLORS.customgrey};
-  padding-bottom: 20px;
-  margin: 10px;
   position: relative;
 `;
 
@@ -82,24 +123,11 @@ const Wrapper2 = styled.div`
   flex-direction: column;
   justify-items: space-around;
   align-items: left;
-  margin-top: 5px;
+  margin: 10px;
 `;
 
 const Wrapper3 = styled.div`
-  display: flex;
-  flex-direction: row;
-  text-align: justify;
-  margin: 0px;
-  border: 2px red solid;
-`;
-
-const Wrapper4 = styled.div`
-  display: flex;
-  flex-direction: row;
-  text-align: justify;
-`;
-
-const Wrapper5 = styled.div`
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   text-align: justify;
@@ -121,7 +149,7 @@ const Avatar = styled.img`
   border: 2px white solid;
 `;
 
-const Copy = styled.h5`
+const Copy = styled.span`
   color: ${COLORS.mediumgrey};
 `;
 
