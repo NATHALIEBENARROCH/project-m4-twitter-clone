@@ -6,7 +6,6 @@ import { cycle } from "react-icons-kit/entypo/cycle";
 import { outlined } from "react-icons-kit/entypo/outlined";
 import { upload } from "react-icons-kit/entypo/upload";
 import { heart } from "react-icons-kit/entypo/heart";
-import { Link } from "react-router-dom";
 
 const TweetActions = ({ id, liked }) => {
   const [isLiked, setIsLiked] = useState(liked);

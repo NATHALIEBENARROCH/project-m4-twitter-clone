@@ -9,7 +9,6 @@ const TweetDetails = () => {
 
   React.useEffect(() => {
     fetch(`/api/tweet/${tweetId}`)
-      //HIGHER ORDER FUNCTION?RES THEN DATA?
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

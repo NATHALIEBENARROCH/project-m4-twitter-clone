@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import CurrentUserContext from "./CurrentUserContext";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { COLORS } from "./constants";

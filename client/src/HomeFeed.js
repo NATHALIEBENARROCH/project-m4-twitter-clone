@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import CurrentUserContext from "./CurrentUserContext";
 import Tweet from "./Tweet";
+import NewTweet from "./NewTweet";
 import styled from "styled-components";
 
 const HomeFeed = () => {
@@ -12,10 +13,10 @@ const HomeFeed = () => {
 
   React.useEffect(() => {
     fetch("/api/me/home-feed")
-      //HIGHER ORDER FUNCTION?RES THEN DATA?
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        //data is received
         setTweets(data);
         // When the data is received, the staus is changed to idle
         setTweetsStatus("idle");
@@ -37,13 +38,13 @@ const HomeFeed = () => {
         return <Tweet tweet={tweet} />;
       })
     ) : (
-      <div>"TWEET COMPONENT</div>
+      <div>LOADING</div>
     );
 
   return status == "idle" ? (
     <TweetFeed>
-      <H1>Home</H1>
-      <div>TWEETFEED{tweetDisplay}</div>
+      <NewTweet />
+      <div>{tweetDisplay}</div>
     </TweetFeed>
   ) : status == "loading" ? (
     <div>loading</div>

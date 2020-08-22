@@ -8,7 +8,6 @@ import TweetDetails from "./TweetDetails";
 import Profile from "./Profile";
 import Sidebar from "./Sidebar";
 import styled from "styled-components";
-// import { COLORS } from "./GlobalStyles";
 import GlobalStyles from "./GlobalStyles";
 
 const App = () => {

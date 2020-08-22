@@ -7,7 +7,7 @@ export const CurrentUserProvider = ({ children }) => {
   const [status, setStatus] = React.useState("loading");
 
   // Fetch the user data from the API (/me/profile)
-
+  //We add a side effect for when something changes! WHAT???
   React.useEffect(() => {
     fetch("/api/me/profile")
       .then((res) => res.json())
