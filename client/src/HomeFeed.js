@@ -5,9 +5,7 @@ import NewTweet from "./NewTweet";
 import styled from "styled-components";
 
 const HomeFeed = () => {
-  const { setCurrentUser, currentUser, status, setStatus } = useContext(
-    CurrentUserContext
-  );
+  const { status } = useContext(CurrentUserContext);
   const [tweets, setTweets] = useState([]);
   const [tweetsStatus, setTweetsStatus] = useState("loading");
 
@@ -28,22 +26,23 @@ const HomeFeed = () => {
         }
       });
   }, []);
+  //when? on load otherwise if empty each render will
   console.log(tweets);
   const tweetDisplay =
     tweetsStatus == "idle" ? (
       tweets.tweetIds.map((id) => {
         const tweet = tweets.tweetsById[id];
-        //add IF BEING FOLLOWED BY YOU?
-        console.log(tweet);
+        //whatever (id) get object of id related to it
+        //SQUARE OBJECTS MAKE ME ACCESS THE VALUE OF THOSE OBJECTS
         return <Tweet tweet={tweet} />;
       })
     ) : (
-      <div>LOADING</div>
+      <div> TD loading</div>
     );
 
   return status == "idle" ? (
     <TweetFeed>
-      <NewTweet />
+      <NewTweet setTweets={setTweets} setTweetsStatus={setTweetsStatus} />
       <div>{tweetDisplay}</div>
     </TweetFeed>
   ) : status == "loading" ? (
@@ -52,11 +51,6 @@ const HomeFeed = () => {
     <div>error</div>
   );
 };
-
-const H1 = styled.h1`
-  font-size: 1rem;
-  padding-left: 10px;
-`;
 
 const TweetFeed = styled.div`
   padding-left: 10px;

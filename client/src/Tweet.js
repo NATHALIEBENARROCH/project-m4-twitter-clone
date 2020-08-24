@@ -7,8 +7,8 @@ import { useHistory } from "react-router-dom";
 import { format } from "date-fns";
 
 const Tweet = ({ tweet }) => {
-  console.log(tweet);
   let history = useHistory();
+  //REVIEW ON CLICK
   function handleClick(ev) {
     ev.preventDefault();
     history.push(`/profile/${tweet.author.handle}`);
@@ -42,7 +42,7 @@ const Tweet = ({ tweet }) => {
       </Wrapper>
     </MyLink>
   ) : (
-    <div>loading</div>
+    <div>Tweet loading</div>
   );
 };
 

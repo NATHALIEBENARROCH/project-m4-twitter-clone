@@ -101,7 +101,7 @@ const Profile = () => {
         ))}
       </Wrapper>
     );
-  else return <span>loading</span>;
+  else return <span>Profile loading</span>;
 };
 
 // if ((params = currentUser.profile.handle))

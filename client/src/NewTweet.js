@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
+
 import styled from "styled-components";
 import { COLORS } from "./constants";
 
-const NewTweet = () => {
+const NewTweet = ({ setTweets, setTweetsStatus }) => {
   const [currentTweet, setCurrentTweet] = useState("");
   const [error, setError] = useState(false);
 
@@ -15,7 +16,7 @@ const NewTweet = () => {
       setError(false);
     }
   };
-
+  //REVIEW ON CHANGE
   const handleOnChange = (ev) => {
     maxCharacters(ev.target.value.length);
     console.log(ev.target.value);
@@ -33,7 +34,21 @@ const NewTweet = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        window.location.reload();
+        fetch("/api/me/home-feed")
+          .then((res) => res.json())
+          .then((data) => {
+            console.log(data);
+            //data is received
+            setTweets(data);
+            // When the data is received, the staus is changed to idle
+            setTweetsStatus("idle");
+          })
+          .catch((error) => {
+            console.log("an error occured please refresh", error);
+            if (error) {
+              window.location.href = "/error";
+            }
+          });
       })
 
       .catch(console.error);
@@ -44,20 +59,21 @@ const NewTweet = () => {
       {error && <div>{errorMessage}</div>}
       <form onSubmit={maxCharacters}>
         <Wrapper>
-          <TextArea
-            // style={{ rows:"4" ,cols:"50" }}
-            type="text"
-            name="content"
-            value={currentTweet}
-            onChange={handleOnChange}
-          ></TextArea>
-
+          <Div>
+            <TextArea
+              // style={{ rows:"4" ,cols:"50" }}
+              type="text"
+              name="content"
+              value={currentTweet}
+              onChange={handleOnChange}
+            ></TextArea>
+          </Div>
           <Button
             onClick={handleSubmitTweet}
             type="submit"
             disabled={currentTweet.length > 0 ? false : true}
           >
-            MEOW
+            MEOOOW
           </Button>
         </Wrapper>
         <Copy>Remaining Characters: {MAXCHAR - currentTweet.length}</Copy>
@@ -93,4 +109,16 @@ const Copy = styled.h5`
   color: ${COLORS.primary};
 `;
 
+const Avatar = styled.img`
+  border-radius: 50%;
+  max-width: 80px;
+  position: absolute;
+  top: 260px;
+  left: 20px;
+  border: 2px white solid;
+`;
+
+const Div = styled.div`
+  display: flex;
+`;
 export default NewTweet;
